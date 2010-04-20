@@ -5,28 +5,35 @@
 #include <ostream>
 #include <iostream>
 
+//static int ast_count = 0;
+
 AST::AST(ASTKind kind, Tokens &tokens, AttributeMap &attrs, ASTChildren &children){
   this->kind = kind;
   this->tokens = tokens;
   this->attributes = attrs;
   this->children = children;
+  //cout << "AST " << ++ast_count << endl;
 }
 
 AST::AST(ASTKind kind, Tokens &tokens){
   this->kind = kind;
   this->tokens = tokens;
+  //cout << "AST " << ++ast_count << endl;
 }
 
 AST::AST(ASTKind kind){
   this->kind = kind;
+  //cout << "AST " << ++ast_count << endl;
 }
 
 AST::AST(ASTKind kind, ASTChildren &children){
   this->kind = kind;
   this->children = children;
+  //cout << "AST " << ++ast_count << endl;
 }
 
 AST::~AST(){
+  //cout << "~AST " << --ast_count << endl;
 }
 
 ASTPtr AST::create(ASTKind kind, Tokens &tokens, AttributeMap &attrs, ASTChildren &children){
@@ -45,6 +52,8 @@ ASTPtr AST::create(ASTKind kind, ASTChildren &children){
   return ASTPtr(new AST(kind, children));
 }
 
+
+static int ast_indent = 0;
 ostream& operator << (ostream& os, AST& ast){
   switch(ast.kind){
   case AST_ERROR: os << "ERROR"; break;
@@ -55,10 +64,15 @@ ostream& operator << (ostream& os, AST& ast){
   case AST_FLOAT: os << "FLOAT"; break;
   }
   cout << "(";
+  ast_indent += 2;
+  if(ast.children.size() > 0) {
+    cout << endl;
+  }
   for(unsigned int i = 0; i < ast.children.size(); i++){
+    for(int j = 0; j < ast_indent; j++) cout << " ";
     cout << *ast.children[i];
     if(i < ast.children.size() - 1){
-      cout << ",";
+      cout << "," << endl;
     }
   }
   for(unsigned int i = 0; i < ast.tokens.size(); i++){
@@ -67,6 +81,7 @@ ostream& operator << (ostream& os, AST& ast){
       cout << ",";
     }
   }
+  ast_indent -= 2;
   cout << ")";
   return os;
 }

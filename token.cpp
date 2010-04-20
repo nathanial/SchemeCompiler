@@ -4,7 +4,7 @@
 #include <boost/shared_ptr.hpp>
 #include <sstream>
 
-static int token_count = 0;
+//static int token_count = 0;
 
 static string token_to_str(char *start, char *end){
        stringstream tok;
@@ -32,11 +32,11 @@ ostream& operator << (ostream& os, Token& token){
 }
 
 Token::Token(TokenType type, string value): type(type), value(value) {
-  cout << "Token Created: " << ++token_count <<  endl;
+  //  cout << "Token Created: " << ++token_count <<  endl;
 }
 
 Token::~Token(){
-  cout << "Token Deleted: " << --token_count << endl;
+  //  cout << "Token Deleted: " << --token_count << endl;
 }
 
 TokenPtr Token::create(TokenType type, string value){

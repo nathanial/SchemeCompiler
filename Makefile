@@ -15,8 +15,11 @@ lexer.o : lexer.rl token.o
 	mv lexer.c lexer.cpp
 	$(CC) -c lexer.cpp
 
-build : main.cpp lexer.o parser.o token.o
-	$(CC) parser.o lexer.o token.o main.cpp -o interp
+eval.o : eval.cpp eval.hpp parser.hpp
+	$(CC) -c eval.cpp
+
+build : main.cpp lexer.o parser.o token.o eval.o
+	$(CC) eval.o parser.o lexer.o token.o main.cpp -o interp
 
 clean : 
 	rm -f *.o
